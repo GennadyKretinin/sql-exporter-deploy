@@ -1,0 +1,24 @@
+jobs:
+- name: "number"
+  interval: '1m'
+  connections:
+    - 'postgres://login:pass@prod/camunda?sslmode=disable'
+  startup_sql:
+  - 'SET lock_timeout = 1000'
+  - 'SET idle_in_transaction_session_timeout = 100'
+  queries:
+  - name: "count_number"
+    help: "Number of frozen counts"
+    values:
+      - "counts"
+    query:  |
+            select count(*) as counts from ....
+  - name: "count_table"
+    help: "All counts"
+    labels:
+      - "field1"
+      - "field2"
+    values:
+      - "field3"
+    query:  |
+            select field1, field2, field3 from ... group by ...

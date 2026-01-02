@@ -1,0 +1,38 @@
+version: "3.4"
+
+services:
+  worker:
+    image: sql_exporter:0.0.1
+    configs:
+      - source: config.yml
+        target: /config/config.yml
+    networks:
+      - network
+    environment:
+      - CONFIG=/config/config.yml
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 150M
+        reservations:
+          cpus: '0.25'
+          memory: 100M
+      restart_policy:
+        condition: any
+        delay: 10s
+        max_attempts: 3
+    healthcheck:
+      test: ["CMD", "curl", "-fI", "http://127.0.0.1:9237"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
+configs:
+  config.yml:
+    file: ./config.yml
+networks:
+  extern-network:
+    external: true
