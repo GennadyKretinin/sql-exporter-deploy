@@ -7,7 +7,7 @@ services:
       - source: config.yml
         target: /config/config.yml
     networks:
-      - network
+      - extern-network
     environment:
       - CONFIG=/config/config.yml
     deploy:
